@@ -27,12 +27,20 @@ if commands[1] == "-d":
     path = commands[2]
     create_directory(path)
     for i in range(3, len(commands)):
-        if commands[i] != "-f":
-            path = os.path.join(path, commands[i])
-            create_directory(path)
-        elif commands[i] == "-f":
+        if commands[i] == "-f":
             path = os.path.join(path, commands[i + 1])
             create_and_write_into_file(path)
             break
+        path = os.path.join(path, commands[i])
+        create_directory(path)
 elif commands[1] == "-f":
-    create_and_write_into_file(commands[2])
+    if len(commands) > 3:
+        path = commands[4]
+        create_directory(path)
+        for i in range(5, len(commands)):
+            path = os.path.join(path, commands[i])
+            create_directory(path)
+        path = os.path.join(path, commands[2])
+        create_and_write_into_file(path)
+    else:
+        create_and_write_into_file(commands[2])
