@@ -15,8 +15,7 @@ def create_and_write_into_file(file_name: str) -> None:
         line_number += 1
     with open(file_name, "a") as source_file:
         source_file.write(current_date.strftime("%Y-%m-%d %H:%M:%S") + "\n")
-        for line in text:
-            source_file.write(line)
+        source_file.writelines(text)
         source_file.write("\n")
 
 
@@ -45,4 +44,5 @@ def handle_command() -> None:
             create_and_write_into_file(commands[2])
 
 
-handle_command()
+if __name__ == "__main__":
+    handle_command()
