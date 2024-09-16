@@ -21,27 +21,26 @@ def create_and_write_into_file(file_name: str) -> None:
 
 def handle_command() -> None:
     commands = sys.argv
-    if commands[1] == "-d":
-        path = commands[2]
+    if "-d" in commands and "-f" in commands:
+        d_index, f_index = commands.index("-d"), commands.index("-f")
+        path = commands[d_index + 1]
         os.makedirs(path, exist_ok=True)
-        for i in range(3, len(commands)):
-            if commands[i] == "-f":
-                path = os.path.join(path, commands[i + 1])
-                create_and_write_into_file(path)
-                break
+        stop_index = f_index if d_index < f_index else len(commands)
+        for i in range(d_index + 2, stop_index):
             path = os.path.join(path, commands[i])
             os.makedirs(path, exist_ok=True)
-    elif commands[1] == "-f":
-        if len(commands) > 3:
-            path = commands[4]
+        path = os.path.join(path, commands[f_index + 1])
+        create_and_write_into_file(path)
+    elif "-f" in commands:
+        f_index = commands.index("-f")
+        create_and_write_into_file(commands[f_index + 1])
+    elif "-d" in commands:
+        d_index = commands.index("-d")
+        path = commands[d_index + 1]
+        os.makedirs(path, exist_ok=True)
+        for i in range(d_index + 2, len(commands)):
+            path = os.path.join(path, commands[i])
             os.makedirs(path, exist_ok=True)
-            for i in range(5, len(commands)):
-                path = os.path.join(path, commands[i])
-                os.makedirs(path, exist_ok=True)
-            path = os.path.join(path, commands[2])
-            create_and_write_into_file(path)
-        else:
-            create_and_write_into_file(commands[2])
 
 
 if __name__ == "__main__":
